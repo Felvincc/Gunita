@@ -32,13 +32,14 @@ function module.new(enemyType: string)
 	self.attackRange = enemyData.attackRange
 	self.sightRange = enemyData.sightRange
 	self.respawnTime = enemyData.respawnTime
+	self.behaviorType = enemyData.behaviorType
 	
 	-- Other
 	self.storedModel = enemyData.model -- Model in the SeverStorage
 	self.model = nil  -- Model of the alive NPC
 	self.spawnPoint = nil
 	self.attackAnimation = enemyData.attackAnimation -- Optional
-	self.behaviorTree = BehaviorTree(self.damage, self.attackRange, self.sightRange, self.attackAnimation)
+	self.behaviorTree = BehaviorTree(self.damage, self.attackRange, self.sightRange, self.attackAnimation, self.behaviorType)
 
 	module.enemies[self.id] = self
 	return self
@@ -78,7 +79,7 @@ function enemyClass:runAI()
 	task.spawn(function()
 		while self.model and self.model.Parent do
 			self.behaviorTree:Tick(self)
-			task.wait(0.2)
+			task.wait(0)
 		end
 		self:die()
 	end)
